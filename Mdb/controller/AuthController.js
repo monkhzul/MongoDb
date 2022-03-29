@@ -12,7 +12,7 @@ const register = async (req, res, next) => {
                 .status(400)
                 .json({
                     success: false,
-                    status: "Хэрэглэгч аль хэдийн үүссэн байна. Нэвтэрч орно уу.",
+                    status: "Хэрэглэгч аль хэдийн үүссэн байна. Нэвтэрч орно уу!.",
                 });
         }
     
@@ -53,12 +53,69 @@ const register = async (req, res, next) => {
 }
 
 
+const login = async (req, res) => {
+    try {
+        // get user input
+        const { email, password } = req.body;
 
+        if (!(email && password)) {
+            res
+                .status(400)
+                .json({
+                    success: false,
+                    status: "Утгуудаа бүрэн оруулна уу!.",
+                    email: email,
+                    password: password
+                })
+                return;
+        }
+        else {
+            // validate if user exist in our database
+            const user = await User.findOne({ email });
+
+            if (user && (await bcrypt.compare(password, user.password))) {
+                // create token
+                const token = jwt.sign(
+                    {
+                        user_id: user._id,
+                        email
+                    },
+                    process.env.TOKEN_KEY,
+                    {
+                        expiresIn: "2h",
+                    }
+                )
+
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        status: "Амжилттай нэвтэрлээ.",
+                        data: user, 
+                        token: token
+                    });
+                    return;
+            }
+            else {
+                res.status(400)
+                    .json({
+                        success: false,
+                        status: "Нууц үг нэр хоорондоо таарахгүй байна."
+                    });
+                    return;
+            }
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
 
 
 
 
 module.exports = {
-    register
+    register,
+    login
 }

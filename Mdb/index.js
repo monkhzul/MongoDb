@@ -1,11 +1,12 @@
+const express = require("express");
 const dotenv = require('dotenv').config();
 const apiRoutes = require("./routes/api.js");
 const adminRoutes = require("./routes/admin.js");
 const connection = require("./database.js");
 
-const express = require("express");
 const app = express();
 const port = 3000;
+
 app.use(express.json());
 app.use(express.static("public"));
 
@@ -22,5 +23,5 @@ app.all("*", (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`App listening at http://localhost: ${port}`);
 });
