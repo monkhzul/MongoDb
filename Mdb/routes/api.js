@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const app = express();
+const auth = require('../middleware/auth')
 
 const FoodController = require("../controller/FoodController");
 const UserController = require("../controller/UserController");
 const OrderController = require("../controller/OrderController");
 
                 //  Food
-router.get('/foods', FoodController.get_foods);
+router.get('/foods', auth , FoodController.get_foods);
 router.post('/create_foods', FoodController.createFood );
 router.post('/update_foods/:id', FoodController.updateFood);
 router.get('/delete_foods/:id', FoodController.deleteFood);
