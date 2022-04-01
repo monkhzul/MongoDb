@@ -8,7 +8,7 @@ const UserController = require("../controller/UserController");
 const OrderController = require("../controller/OrderController");
 
                 //  Food
-router.get('/foods', auth , FoodController.get_foods);
+router.get('/foods', FoodController.get_foods);
 router.post('/create_foods', FoodController.createFood );
 router.post('/update_foods/:id', FoodController.updateFood);
 router.get('/delete_foods/:id', FoodController.deleteFood);
